@@ -1,0 +1,1423 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(0 0% 9%);
+  --color-card: hsl(0 0% 98%);
+  --color-card-foreground: hsl(0 0% 9%);
+  --color-primary: hsl(25 95% 53%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(0 0% 96%);
+  --color-secondary-foreground: hsl(0 0% 9%);
+  --color-muted: hsl(0 0% 96%);
+  --color-muted-foreground: hsl(0 0% 45%);
+  --color-accent: hsl(0 0% 96%);
+  --color-accent-foreground: hsl(0 0% 9%);
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(0 0% 90%);
+  --color-input: hsl(0 0% 90%);
+  --color-ring: hsl(25 95% 53%);
+  --radius: 0.5rem;
+
+  /* Type — 3 bundled @fontsource-variable faces (offline-safe) + system fallbacks. Generated apps use
+     font-display / font-sans / font-serif / font-mono. Mono is a system stack (no bundled mono face). */
+  /* Extrafazant roles: Inter stands in for Helvetica Now (headings, body, nav).
+     Instrument Sans stands in for Serrif (alt words, eyebrows, text links). */
+  --font-display: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --color-heading: #101010;
+  --color-body: #31383b;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  /* System-only stacks — a free, offline 4th type voice for diverging same-genre builds. */
+  --font-system-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-system-serif: Georgia, Cambria, "Times New Roman", serif;
+  --font-system-mono: ui-monospace, Menlo, Consolas, monospace;
+  /* Extrafazant heading scale at a 16px root: l 96px, xl 128px, xxl 192px. */
+  --text-display-lg: clamp(2.75rem, 1.1rem + 3.6vw, 6rem);
+  --text-display-xl: clamp(3.5rem, 1.15rem + 4.8vw, 8rem);
+  --text-display-2xl: clamp(4.75rem, 1.2rem + 7vw, 12rem);
+}
+
+/* uat R160: `--radius` is the app's CONTROL radius, the one shape token the generated :root override
+   sets (the design contract names it). Tailwind v4 reads border-radius utilities from the --radius-*
+   namespace, so the bare --radius above changed nothing until this block: rounded-sm/md/lg/xl/2xl now
+   derive from it (the shadcn v4 scale). At the 0.5rem default every value equals Tailwind's own
+   (4/6/8/12/16px), so apps that never set it do not move. `inline` keeps the calc() in the utility so
+   it resolves against the override on :root rather than against this layer's default. rounded-full
+   stays 9999px: the pill idiom is a stance the contract declares, not a scale step. */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+/* Dark palette. `:root.dark` (specificity 0,2,0) deliberately BEATS the plain `:root` block the
+   generated App.tsx injects at build time (0,1,0) — relying on source order would lose, because that
+   <style> tag is parsed after this stylesheet. src/lib/theme.ts owns the `dark` class on <html>.
+   A generated app that ships its own palette overrides BOTH blocks (see the codegen prompt); these
+   values are the fallback so the template itself, and any app that only overrides `:root`, still has
+   a usable dark mode instead of black-on-white. */
+:root.dark {
+  --color-background: hsl(0 0% 7%);
+  --color-heading: hsl(0 0% 96%);
+  --color-body: hsl(0 0% 78%);
+  --color-foreground: hsl(0 0% 96%);
+  --color-card: hsl(0 0% 11%);
+  --color-card-foreground: hsl(0 0% 96%);
+  --color-primary: hsl(25 95% 58%);
+  --color-primary-foreground: hsl(0 0% 10%);
+  --color-secondary: hsl(0 0% 15%);
+  --color-secondary-foreground: hsl(0 0% 96%);
+  --color-muted: hsl(0 0% 15%);
+  --color-muted-foreground: hsl(0 0% 64%);
+  --color-accent: hsl(0 0% 18%);
+  --color-accent-foreground: hsl(0 0% 96%);
+  --color-destructive: hsl(0 72% 58%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(0 0% 20%);
+  --color-input: hsl(0 0% 20%);
+  --color-ring: hsl(25 95% 58%);
+}
+
+/* Base surface + text color so EVERY element (incl. provided ui/* components that don't set their own
+   text color) inherits the app's foreground, not the browser default black. The per-build :root override
+   in App.tsx updates these vars, so body follows the app palette (fixes invisible text on dark apps). */
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.4;
+}
+
+:root {
+  --sl-paper: #fbfbfb;
+  --sl-paper-tile: 1024px;
+  --sl-secondary-fill: #ffffff;
+  --sl-secondary-line: #cfcfcf;
+  --sl-secondary-ink: #080808;
+  --sl-control-height: 3rem;
+  --sl-footer-ground: #101010;
+  --sl-footer-ink: #f4f4f4;
+  --sl-footer-muted: #c8cfd3;
+  --sl-faq-columns: 120px;
+  --sl-faq-stack: 40px;
+  --sl-founder-width: 22rem;
+  --sl-founder-ratio: 3 / 4;
+}
+
+.sl-paper {
+  background-color: var(--color-background);
+}
+
+html:root:not(.dark) .sl-paper {
+  background-color: var(--sl-paper);
+  background-image: url("/paper-grain.png");
+  background-repeat: repeat;
+  background-size: var(--sl-paper-tile) var(--sl-paper-tile);
+}
+
+.sl-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  height: var(--sl-control-height);
+  padding: 0 1rem;
+  border: 1px solid var(--sl-secondary-line);
+  border-radius: 0;
+  background-color: var(--sl-secondary-fill);
+  color: var(--sl-secondary-ink);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  font-stretch: 75%;
+  font-variation-settings: "wght" 700, "wdth" 75;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sl-secondary:hover {
+  background-color: var(--sl-secondary-fill);
+  color: var(--sl-secondary-ink);
+}
+
+.sl-secondary:focus-visible {
+  outline: 2px solid var(--sl-secondary-ink);
+  outline-offset: 2px;
+}
+
+.sl-footer-dark {
+  background-color: var(--sl-footer-ground);
+  color: var(--sl-footer-ink);
+  --color-background: var(--sl-footer-ground);
+  --color-foreground: var(--sl-footer-ink);
+  --color-heading: var(--sl-footer-ink);
+  --color-body: var(--sl-footer-muted);
+  --color-muted-foreground: var(--sl-footer-muted);
+  --color-card: var(--sl-footer-ground);
+  --color-card-foreground: var(--sl-footer-ink);
+  --color-border: color-mix(in srgb, var(--sl-footer-ink) 18%, var(--sl-footer-ground));
+}
+
+.sl-founders {
+  display: grid;
+  align-items: start;
+  gap: 2.5rem;
+}
+
+@media (min-width: 64rem) {
+  .sl-founders {
+    grid-template-columns: minmax(0, 1fr) var(--sl-founder-width);
+    column-gap: 4rem;
+  }
+}
+
+.sl-founder-frame {
+  position: relative;
+  width: min(100%, var(--sl-founder-width));
+  aspect-ratio: var(--sl-founder-ratio);
+  overflow: hidden;
+  background-color: var(--color-foreground);
+}
+
+/* Extrafazant type + space, with ShackLine faces.
+   Headings: Inter, uppercase, 700, tracking -0.02em, leading 0.8.
+   Alt / eyebrow / text links: Instrument Sans (Serrif), stretch 75%.
+   Section rhythm: 128px block padding, 2em page inset, 2em grid gap. */
+@layer components {
+  .ef-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 75%;
+    font-variation-settings: "wght" 700, "wdth" 75;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-transform: none;
+    text-wrap: balance;
+    hyphens: none;
+    color: var(--color-heading);
+  }
+  .ef-xxl { font-size: clamp(4.75rem, 1.2rem + 7vw, 12rem); line-height: 0.8; }
+  .ef-xl { font-size: clamp(3.5rem, 1.15rem + 4.8vw, 8rem); line-height: 0.8; }
+  .ef-l { font-size: clamp(2.75rem, 1.1rem + 3.6vw, 6rem); line-height: 0.8; }
+  .ef-m { font-size: clamp(2.5rem, 1rem + 2.8vw, 5rem); line-height: 0.8; }
+  .ef-s { font-size: clamp(2.25rem, 1rem + 2.2vw, 4rem); line-height: 0.9; }
+  .ef-xs { font-size: clamp(1.5rem, 0.9rem + 1.1vw, 2.5rem); line-height: 0.9; }
+  .ef-xxs { font-size: 1.5rem; line-height: 0.9; }
+  .ef-alt {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-stretch: 75%;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-transform: none;
+  }
+  .ef-eyebrow {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-stretch: 75%;
+    font-size: clamp(1.75rem, 1rem + 1.4vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: none;
+  }
+  .ef-body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: clamp(1.125rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.5;
+    letter-spacing: -0.011em;
+    color: var(--color-body);
+  }
+  .ef-lead {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    letter-spacing: -0.04em;
+  }
+  .ef-section {
+    width: 100%;
+    max-width: 120rem;
+    margin-inline: auto;
+    padding-block: clamp(4.5rem, 6vw, 8rem);
+    padding-inline: clamp(1.25rem, 1.6vw, 2rem);
+  }
+
+  /* Headlines: the nav face (Instrument Sans, condensed). Body: Inter at --color-body.
+     Indexes, labels and asides: muted. The dark hero keeps its own light ink. */
+  .sl-wrap {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-block: clamp(5.5rem, 9vw, 8.5rem);
+    padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  }
+  .sl-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 75%;
+    font-variation-settings: "wght" 700, "wdth" 75;
+    letter-spacing: 0;
+    line-height: 1.05;
+    text-transform: none;
+    text-wrap: balance;
+    color: var(--color-heading);
+  }
+  .sl-display-lg {
+    font-size: clamp(2.75rem, 1.4rem + 3.2vw, 4.75rem);
+  }
+  .sl-display-md {
+    font-size: clamp(2rem, 1.2rem + 1.8vw, 3rem);
+    letter-spacing: -0.03em;
+  }
+  .sl-display-sm {
+    font-size: clamp(1.45rem, 1.1rem + 0.7vw, 1.85rem);
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+  }
+  .sl-copy {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    letter-spacing: -0.011em;
+    color: var(--color-body);
+  }
+  .sl-index {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-muted-foreground);
+  }
+  [data-section="type-as-graphic-hero"] :is(h1, h2, h3, .ef-heading) {
+    color: #f4f4f4;
+  }
+  [data-section="type-as-graphic-hero"] .ef-body {
+    color: color-mix(in srgb, #f4f4f4 72%, transparent);
+  }
+  .sl-rule {
+    border-color: color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+  .ef-inset {
+    padding-inline: clamp(1.25rem, 1.6vw, 2rem);
+  }
+
+  /* Extrafazant desktop root: 1em = 16px at a 1920 design width.
+     body font-size = clamp(min, 100dvw, max) / (ideal / 16). */
+  :root {
+    --ef-nav-size: calc(clamp(992px, 100dvw, 3840px) / (1920 / 16));
+    --ef-logo-width: 10em;
+  }
+
+  .ef-designs {
+    font-family: "Arial Rounded MT Bold", "Arial Rounded MT", sans-serif;
+    font-size: 1.15em;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ef-logo {
+    display: block;
+    width: var(--ef-logo-width);
+    height: auto;
+  }
+
+  .ef-nav-face {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 75%;
+    font-variation-settings: "wght" 700, "wdth" 75;
+    font-size: 1em;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--nav-ink, #131313);
+  }
+
+  .ef-nav-face a {
+    color: var(--nav-ink, #131313);
+    transition: color 200ms ease;
+  }
+
+  .ef-nav-face a:hover {
+    color: var(--nav-ink-hover, #6b6b6b);
+  }
+
+  .ef-quote {
+    --ef-quote-ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --ef-quote-ink: #131313;
+    --ef-quote-paper: #fff;
+    --ef-quote-dot: var(--color-primary);
+    --ef-quote-dot-a: var(--color-primary);
+    --ef-quote-dot-b: color-mix(in srgb, var(--color-primary) 55%, white);
+    --ef-quote-dot-c: var(--color-primary);
+    position: relative;
+    display: inline-grid;
+    padding: 0;
+    color: var(--ef-quote-ink);
+    background: transparent;
+    line-height: 1;
+    text-decoration: none;
+    user-select: none;
+    scale: 1 1;
+    transition: scale 0.45s var(--ef-quote-ease);
+    will-change: transform;
+  }
+
+  .ef-quote__bg,
+  .ef-quote__inner {
+    grid-area: 1 / 1;
+    border-radius: 0;
+  }
+
+  .ef-quote__bg {
+    background: var(--ef-quote-paper);
+  }
+
+  .ef-quote__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375em;
+    width: 100%;
+    height: 100%;
+    padding: 0.75em 1em 0.75em 0.75em;
+    overflow: clip;
+  }
+
+  .ef-quote__dots,
+  .ef-quote__text-wrap {
+    display: grid;
+  }
+
+  .ef-quote__dot,
+  .ef-quote__text {
+    grid-area: 1 / 1;
+  }
+
+  .ef-quote__dot {
+    width: 0.5em;
+    height: 0.5em;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--ef-quote-dot);
+    transform-origin: calc((100% + 0.25em) * -1) 50%;
+    transition:
+      rotate 0.45s var(--ef-quote-ease),
+      scale 0.45s var(--ef-quote-ease);
+    transition-delay: calc(var(--index, 0) * 0.032s);
+  }
+
+  .ef-quote__dot.is-a,
+  .ef-quote__dot.is-b,
+  .ef-quote__dot.is-c {
+    rotate: 120deg;
+    scale: 0;
+  }
+
+  .ef-quote__dot.is-a { background: var(--ef-quote-dot-a); z-index: 3; }
+  .ef-quote__dot.is-b { background: var(--ef-quote-dot-b); z-index: 2; }
+  .ef-quote__dot.is-c { background: var(--ef-quote-dot-c); z-index: 1; }
+
+  .ef-quote__text {
+    transform-origin: left center;
+    transition:
+      translate 0.45s var(--ef-quote-ease),
+      rotate 0.45s var(--ef-quote-ease);
+    white-space: nowrap;
+  }
+
+  .ef-quote__text.is-hover {
+    rotate: 75deg;
+    translate: -0.75em 2em;
+  }
+
+  .ef-quote::after {
+    content: "";
+    position: absolute;
+    inset: -0.125em;
+    z-index: 1;
+    pointer-events: none;
+    transition: box-shadow 0.3s var(--ef-quote-ease);
+  }
+
+  .ef-quote:focus-visible {
+    outline: none;
+  }
+
+  .ef-quote:focus-visible::after {
+    box-shadow: 0 0 0 0.125em var(--ef-quote-ink);
+  }
+}
+
+/* Same condensed face as the header quote button. Unlayered so it beats Tailwind's font utilities. */
+.ef-button-face,
+.ef-nav-face,
+.ef-primary,
+.ef-primary__text,
+.ef-quote,
+.ef-quote__text,
+.font-serif {
+  font-family: var(--font-display);
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+}
+
+.ef-button-face,
+.ef-nav-face,
+.ef-primary,
+.ef-primary__text,
+.ef-quote,
+.ef-quote__text {
+  font-weight: 700;
+  font-variation-settings: "wght" 700, "wdth" 75;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* The pill stays white in both themes, so its labels keep the light-theme ink. */
+[data-site-header] .ef-nav-face a {
+  color: color-mix(in srgb, #101010 75%, transparent);
+}
+
+[data-site-header] .ef-nav-face a:hover,
+[data-site-header] .ef-nav-face a[aria-current="page"] {
+  color: #101010;
+}
+
+/* Extrafazant button-052. Height, pad, and type come from the host control.
+   Unlayered so the two slabs beat the host button's fill, padding, and radius. */
+  .ef-primary {
+    --ef-primary-gap: 0.125em;
+    --ef-primary-arrow: 0.875em;
+    --ef-primary-pop: -0.325em;
+    --ef-primary-lift: -0.125em;
+    --ef-primary-ease: linear(0, 0.5737 7.6%, 0.8382 11.87%, 0.9463 14.19%, 1.0292 16.54%, 1.0886 18.97%, 1.1258 21.53%, 1.137 22.97%, 1.1424 24.48%, 1.1423 26.1%, 1.1366 27.86%, 1.1165 31.01%, 1.0507 38.62%, 1.0219 42.57%, 0.9995 46.99%, 0.9872 51.63%, 0.9842 58.77%, 1.0011 81.26%, 1);
+    --ef-primary-soft: cubic-bezier(0.59, 1, 0.88, 1.01);
+    --ef-primary-bounce: cubic-bezier(0.34, 2.27, 0.64, 1);
+    --ef-primary-focus: cubic-bezier(0.32, 0.72, 0, 1);
+    --ef-primary-height: 2.25rem;
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--ef-primary-gap);
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--color-primary-foreground);
+    line-height: 1;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ef-primary.w-full {
+    width: 100%;
+  }
+
+  .ef-primary__icon {
+    display: grid;
+    flex: none;
+    aspect-ratio: 1;
+    height: 100%;
+    pointer-events: none;
+    color: var(--color-primary-foreground);
+  }
+
+  .ef-primary__icon.is-hover {
+    position: absolute;
+    top: var(--ef-primary-lift);
+    right: var(--ef-primary-pop);
+    scale: 0;
+    opacity: 0;
+    transition:
+      scale 0.75s var(--ef-primary-ease),
+      opacity 0.15s 0.1s ease-out;
+  }
+
+  .ef-primary__icon.is-rest {
+    transition:
+      scale 0.75s var(--ef-primary-ease),
+      opacity 0.15s ease-out;
+  }
+
+  .ef-primary__plate,
+  .ef-primary__arrow {
+    grid-area: 1 / 1;
+  }
+
+  .ef-primary__plate {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border-radius: 0;
+    background-color: var(--color-primary);
+  }
+
+  .ef-primary__arrow {
+    width: var(--ef-primary-arrow);
+    height: var(--ef-primary-arrow);
+    place-self: center;
+  }
+
+  .ef-primary__text {
+    z-index: 1;
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-width: 0;
+    padding: 0 var(--ef-primary-pad, 1rem);
+    border-radius: 0;
+    background-color: var(--color-primary);
+    color: inherit;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 75%;
+    font-variation-settings: "wght" 700, "wdth" 75;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+    will-change: transform;
+    transition:
+      translate 0.8s var(--ef-primary-ease),
+      rotate 0.8s var(--ef-primary-ease),
+      scale 0.15s var(--ef-primary-soft),
+      transform 0.15s var(--ef-primary-soft);
+  }
+
+  .ef-primary::after {
+    content: "";
+    position: absolute;
+    inset: -0.125em;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 0;
+    transition: box-shadow 0.3s var(--ef-primary-focus);
+  }
+
+  .ef-primary:focus-visible {
+    outline: none;
+  }
+
+  .ef-primary:focus-visible::after {
+    box-shadow: 0 0 0 0.125em var(--color-foreground);
+  }
+
+@media (max-width: 991px) {
+  :root {
+    --ef-nav-size: calc(clamp(480px, 100dvw, 991px) / (991 / 16));
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --ef-nav-size: calc(clamp(320px, 100dvw, 479px) / (479 / 16));
+    --ef-logo-width: 7.25em;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1439px) {
+  :root {
+    --ef-nav-size: 14px;
+  }
+}
+
+.sl-header-pad {
+  padding-left: max(2em, env(safe-area-inset-left));
+  padding-right: max(2em, env(safe-area-inset-right));
+}
+
+.sl-hero {
+  container-type: inline-size;
+  container-name: hero;
+  --sl-hero-corner: 32px;
+  --sl-hero-corner-top: 80px;
+  --sl-hero-side: 14px;
+  --sl-hero-side-width: 32ch;
+  --sl-hero-center: 36px;
+  --sl-hero-bottom: clamp(7.5rem, 16vw, 18rem);
+  --sl-card-width: 18vw;
+  --sl-card-min: 148px;
+}
+
+@media (max-width: 1279px) {
+  .sl-hero {
+    --sl-hero-corner: clamp(1.25rem, 2.2vw, 2rem);
+    --sl-hero-side-width: min(32ch, 38%);
+    --sl-hero-bottom: min(18rem, (100cqi - 1.5rem) / 5.6);
+    --sl-card-min: 120px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sl-phase,
+  .sl-phase__title {
+    position: static !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #footer-crown-heading {
+    line-height: 0.95;
+  }
+
+  .sl-hero {
+    --sl-hero-corner: clamp(1rem, 4.6vw, 1.35rem);
+    --sl-hero-corner-top: calc(4 * var(--ef-nav-size) + env(safe-area-inset-top) + 0.75rem);
+    --sl-hero-center: clamp(1.35rem, 7vw, 2.25rem);
+    --sl-hero-side-width: 100%;
+    --sl-hero-bottom: min(18rem, (100cqi - 1.5rem) / 5.6);
+    --sl-card-width: min(42vw, 200px);
+    --sl-card-min: 0px;
+  }
+
+  .sl-hero__corners > * {
+    max-width: 46%;
+  }
+
+  .sl-hero__mid {
+    align-items: flex-end;
+    padding-bottom: calc(var(--sl-hero-bottom) + 0.75rem);
+  }
+
+  .sl-hero__mid-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .sl-hero__clock {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .ef-quote:is(:hover, :focus-visible) {
+    scale: var(--button-093-scale-x, 1) var(--button-093-scale-y, 1);
+    transition: scale 0.45s 0.05s var(--ef-quote-ease);
+  }
+
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__text {
+    transition-delay: 0.05s;
+  }
+
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__text.is-default {
+    rotate: -75deg;
+    translate: -0.75em -2em;
+  }
+
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__text.is-hover {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__dot {
+    rotate: -120deg;
+    scale: 0;
+    transition-delay: calc(var(--index, 0) * 0.032s + 0.05s);
+  }
+
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__dot.is-a,
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__dot.is-b,
+  .ef-quote:is(:hover, :focus-visible) .ef-quote__dot.is-c {
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  .ef-primary:is(:hover, :focus-visible) .ef-primary__text {
+    translate: calc(var(--ef-primary-height) * -1) var(--ef-primary-pop) 0;
+    rotate: -3deg;
+    scale: 0.935 0.905;
+    transform: scale(1.0695187166, 1.1049723757);
+    transition:
+      translate 0.8s 0.05s var(--ef-primary-ease),
+      rotate 0.8s 0.05s var(--ef-primary-ease),
+      scale 0.15s 0.05s var(--ef-primary-soft),
+      transform 0.45s 0.2s var(--ef-primary-bounce);
+  }
+
+  .ef-primary:is(:hover, :focus-visible) .ef-primary__icon.is-rest {
+    scale: 0;
+    opacity: 0;
+    transition:
+      scale 0.75s 0.05s var(--ef-primary-ease),
+      opacity 0.15s 0.2s ease-out;
+  }
+
+  .ef-primary:is(:hover, :focus-visible) .ef-primary__icon.is-hover {
+    scale: 1;
+    opacity: 1;
+    transition:
+      scale 0.75s 0.1s var(--ef-primary-ease),
+      opacity 0.15s ease-out;
+  }
+}
+
+/* ── Native-WebView baseline ───────────────────────────────────────────────────────────────────
+   Everything below exists so a generated app behaves like an app, not a web page, inside an Android
+   or iOS WebView. These are shipped here (locked) rather than asked of the model per build, because
+   they are identical for every app and a model that forgets one produces a subtly wrong-feeling app
+   that no test catches. Requires viewport-fit=cover in index.html for the safe-area values to be
+   anything but 0. */
+
+/* Rubber-band / bounce scroll at the document edges reads as "this is a web page in a browser". Kill
+   it at the root only — inner scrollers keep their own overscroll behaviour (a scrollable sheet should
+   still chain normally). */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+/* The grey flash Android draws over any tapped element. Native apps do not do this; components own
+   their own pressed state. */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe-area utilities for notches, punch-holes, and the home indicator. Use on whatever element is
+   actually flush with an edge: `pt-safe` on a fixed header, `pb-safe` on a bottom tab bar, `p-safe`
+   on a full-bleed screen. max() keeps a sensible minimum on devices with no inset. */
+.pt-safe { padding-top: max(env(safe-area-inset-top), 0px); }
+.pr-safe { padding-right: max(env(safe-area-inset-right), 0px); }
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+.pl-safe { padding-left: max(env(safe-area-inset-left), 0px); }
+.p-safe {
+  padding-top: max(env(safe-area-inset-top), 0px);
+  padding-right: max(env(safe-area-inset-right), 0px);
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  padding-left: max(env(safe-area-inset-left), 0px);
+}
+/* Min-height variants for headers/tab bars that need the inset ADDED to their own height. */
+.h-safe-top { min-height: calc(3.5rem + env(safe-area-inset-top)); }
+.h-safe-bottom { min-height: calc(3.5rem + env(safe-area-inset-bottom)); }
+
+/* Long-pressing app chrome should not raise a text-selection handle and a copy bubble — that is the
+   single loudest "this is a website" tell in a WebView. Scoped tightly to controls and their icons,
+   and gated to coarse pointers: on a desktop browser this rule made <label> and <summary> text (FAQ
+   questions, field descriptions) uncopyable for no benefit; long-press does not exist with a mouse.
+   Content stays selectable, and anything the app explicitly marks with `select-text` opts back in.
+   The re-assertion below is REQUIRED: these rules are unlayered while Tailwind's own select-text
+   utility lives in @layer utilities, and unlayered CSS beats layered CSS regardless of specificity
+   or source order, so without the explicit rule the opt-out would silently do nothing. */
+@media (pointer: coarse) {
+  button,
+  [role='button'],
+  [role='tab'],
+  [role='menuitem'],
+  nav a,
+  label,
+  summary,
+  svg {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+.select-text,
+.select-text * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* iOS zooms the page when a font-size < 16px input is focused, and never zooms back out. Inside
+   @layer base so any explicit Tailwind text size on the input (utilities layer beats base) still
+   wins; unlayered, this clamped a text-2xl hero search field down to 16px on iPads only. An app
+   that explicitly sets text-sm on an input re-accepts the zoom; that is its author's call. */
+@layer base {
+  @supports (-webkit-touch-callout: none) {
+    input,
+    select,
+    textarea {
+      font-size: max(16px, 1rem);
+    }
+  }
+}
+
+/* Premium overlay scrollbar — theme-agnostic (reads on light + dark apps) so the AIWA preview
+   never shows the bare OS scrollbar. Thin, rounded, semi-transparent, floats via the padding trick. */
+* { scrollbar-width: thin; scrollbar-color: rgb(140 140 140 / 0.45) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgb(140 140 140 / 0.4);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgb(140 140 140 / 0.62); background-clip: content-box; }
+*::-webkit-scrollbar-corner { background: transparent; }
+
+/* ── AIWA fx layer ─────────────────────────────────────────────────────────────────────────────
+   Keyframes + utilities backing src/components/fx/* (the template-provided premium kit). Animate
+   transform / opacity / background-position ONLY (GPU-composited, no layout thrash). All color
+   comes from the theme tokens via the components, so the per-build :root override re-skins every
+   effect. The reduced-motion gate at the end silences the whole layer. */
+
+@keyframes fx-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fx-drift-a {
+  0%, 100% { transform: translate3d(-4%, -2%, 0) scale(1); }
+  50% { transform: translate3d(5%, 4%, 0) scale(1.08); }
+}
+@keyframes fx-drift-b {
+  0%, 100% { transform: translate3d(3%, 4%, 0) scale(1.05); }
+  50% { transform: translate3d(-5%, -3%, 0) scale(1); }
+}
+@keyframes fx-breathe {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+@keyframes fx-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fx-marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes fx-shimmer {
+  from { transform: translateX(-150%) skewX(-12deg); }
+  to { transform: translateX(250%) skewX(-12deg); }
+}
+@keyframes fx-meteor {
+  0% { opacity: 0; transform: rotate(215deg) translateX(0); }
+  10%, 70% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(215deg) translateX(-620px); }
+}
+@keyframes fx-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Entrance utilities — the CSS fallback for the ONE orchestrated entrance (Reveal.tsx is the
+   motion-powered version). .fx-stagger fades its direct children up with a per-child delay. */
+.fx-reveal { animation: fx-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.fx-stagger > * { animation: fx-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--fx-i, 0) * 90ms); }
+.fx-stagger > *:nth-child(1) { --fx-i: 0; }
+.fx-stagger > *:nth-child(2) { --fx-i: 1; }
+.fx-stagger > *:nth-child(3) { --fx-i: 2; }
+.fx-stagger > *:nth-child(4) { --fx-i: 3; }
+.fx-stagger > *:nth-child(5) { --fx-i: 4; }
+.fx-stagger > *:nth-child(6) { --fx-i: 5; }
+.fx-stagger > *:nth-child(7) { --fx-i: 6; }
+.fx-stagger > *:nth-child(8) { --fx-i: 7; }
+
+/* Reduced motion: silence the entire fx layer (elements land in their final state). The class gate
+   covers the CSS utilities; [data-fx-anim] covers every fx component that sets `animation:` inline
+   (Aurora, Spotlight, Marquee, ShineBorder, ShimmerButton, Meteors, GradientText), which the class
+   gate never matched before 2026-09-23. Pieces that are meaningless when frozen mid-flight are hidden
+   instead. The motion/react primitives gate themselves with useReducedMotion() and render their static
+   form; <MotionConfig reducedMotion="user"> in the locked main.tsx only strips positional keys. */
+@media (prefers-reduced-motion: reduce) {
+  [class*='fx-'],
+  .fx-stagger > *,
+  [data-fx-anim] {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  [data-fx-anim='fx-shimmer'],
+  [data-fx-anim='fx-meteor'],
+  [data-fx-anim='fx-spin'] {
+    display: none;
+  }
+}
+
+/* Extrafazant intro collage. 1em follows their fluid root:
+   container / (design width / 16), so 35em is the same physical size as on extrafazant.nl. */
+.sl-collage-band {
+  --sl-collage-em: calc(clamp(992px, 100dvw, 3840px) / (1920 / 16));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1em;
+  align-items: center;
+  width: 100%;
+  padding: clamp(5.5rem, 9vw, 8.5rem) 2em 5.5em;
+  font-size: var(--sl-collage-em);
+}
+
+.sl-collage-copy {
+  justify-self: end;
+  width: min(100%, 34rem);
+  padding-right: 2em;
+}
+
+.sl-collage {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  padding-left: 4em;
+}
+
+.sl-collage__list {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sl-collage__item {
+  transform-origin: center center;
+}
+
+.sl-collage__inner {
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transition: transform 0.8s cubic-bezier(0.3, 0.075, 0, 1);
+  will-change: transform;
+}
+
+.sl-collage__large {
+  position: relative;
+  width: 35em;
+  aspect-ratio: 4 / 5;
+  transform: rotate(-3deg);
+}
+
+.sl-collage__medium {
+  position: absolute;
+  z-index: 1;
+  width: 23.75em;
+  aspect-ratio: 4 / 5;
+  inset: auto 0% -4em auto;
+  transform: rotate(4deg);
+}
+
+.sl-collage__sticker {
+  position: absolute;
+  z-index: 2;
+  width: 20em;
+  inset: 10em 10em auto auto;
+}
+
+.sl-collage__card {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  position: relative;
+}
+
+.sl-collage__card.is-large {
+  padding: 1em;
+}
+
+.sl-collage__card.is-medium {
+  padding: 1em 1em 4em;
+}
+
+.sl-collage__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sl-collage__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.sl-collage__sticker-wrap {
+  width: 100%;
+  height: 100%;
+  padding: 2.5em;
+}
+
+.sl-collage__mark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 991px) {
+  .sl-collage-band {
+    --sl-collage-em: calc(clamp(768px, 100dvw, 991px) / (991 / 16));
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4em;
+    padding-bottom: 5.5em;
+  }
+
+  .sl-collage-copy {
+    justify-self: stretch;
+    width: 100%;
+    padding-right: 0;
+  }
+
+  .sl-collage {
+    justify-content: center;
+    padding-left: 0;
+  }
+
+  .sl-collage__large {
+    width: 28em;
+    left: -8em;
+  }
+
+  .sl-collage__medium {
+    width: 20em;
+    right: 5em;
+  }
+
+  .sl-collage__sticker {
+    width: 16em;
+    top: 9em;
+    right: 14em;
+  }
+}
+
+@media (max-width: 767px) {
+  .sl-collage-band {
+    --sl-collage-em: calc(clamp(480px, 100dvw, 767px) / (767 / 16));
+  }
+
+  .sl-collage {
+    height: 72vw;
+    overflow: hidden;
+    justify-content: center;
+    padding-left: 0;
+  }
+
+  .sl-collage__list {
+    height: 100%;
+  }
+
+  .sl-collage__large {
+    position: absolute;
+    width: 58%;
+    left: 4%;
+    top: 8%;
+  }
+
+  .sl-collage__medium {
+    width: 46%;
+    inset: auto 2% 0 auto;
+  }
+
+  .sl-collage__card.is-medium {
+    padding-bottom: 3em;
+  }
+
+  .sl-collage__sticker {
+    width: 34%;
+    inset: 0 8% auto auto;
+  }
+}
+
+@media (max-width: 479px) {
+  .sl-collage-band {
+    --sl-collage-em: calc(clamp(320px, 100dvw, 479px) / (479 / 16));
+  }
+
+  .sl-collage__large {
+    width: 58%;
+    left: 4%;
+  }
+
+  .sl-collage__medium {
+    width: 46%;
+    right: 2%;
+  }
+
+  .sl-collage__card.is-large {
+    padding: 0.75em;
+  }
+
+  .sl-collage__card.is-medium {
+    padding-top: 0.75em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+  }
+
+  .sl-collage__sticker {
+    width: 34%;
+    top: 0;
+    right: 8%;
+  }
+
+  .sl-collage__sticker-wrap {
+    padding: 1.6em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-collage__inner {
+    transition: none;
+  }
+}
+
+/* Junca FAQ. Sizes and motion are theirs. Type and color stay ours. */
+.sl-faq {
+  --sl-faq-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  padding: 64px 0 120px;
+}
+
+.sl-faq__container {
+  width: 95%;
+  margin-inline: auto;
+}
+
+.sl-faq__heading {
+  max-width: 377px;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 7.6vw, 32px);
+  font-weight: 700;
+  font-stretch: 75%;
+  font-variation-settings: "wght" 700, "wdth" 75;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.sl-faq__grid {
+  display: grid;
+  grid-template-columns: 1fr 831px;
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--sl-faq-columns);
+  margin-top: 80px;
+  padding-right: 60px;
+}
+
+.sl-faq__left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sl-faq__keep {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--color-heading);
+}
+
+.sl-faq__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+}
+
+.sl-faq__list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sl-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 8px 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.sl-faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.sl-faq__q::marker {
+  content: "";
+}
+
+.sl-faq__q:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.sl-faq__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: -0.04em;
+  color: var(--color-heading);
+  transition: color 0.3s;
+}
+
+.sl-faq__icon {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  transition: transform 0.6s var(--sl-faq-ease);
+}
+
+.sl-faq__icon::before,
+.sl-faq__icon::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--color-primary);
+  transition: transform 0.45s var(--sl-faq-ease);
+}
+
+.sl-faq__icon::after {
+  transform: rotate(90deg);
+}
+
+.sl-faq__item.is-open .sl-faq__icon {
+  transform: rotate(180deg);
+}
+
+.sl-faq__item.is-open .sl-faq__icon::after {
+  transform: rotate(0);
+}
+
+.sl-faq__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s var(--sl-faq-ease);
+}
+
+.sl-faq__item.is-open .sl-faq__a {
+  grid-template-rows: 1fr;
+}
+
+.sl-faq__a-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sl-faq__a p {
+  max-width: 72ch;
+  margin: 0;
+  padding: 8px 48px 24px 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--color-body);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s var(--sl-faq-ease);
+}
+
+.sl-faq__item.is-open .sl-faq__a p {
+  opacity: 1;
+  transform: none;
+  transition-delay: 80ms;
+}
+
+@media (hover: hover) {
+  .sl-faq__q:hover .sl-faq__title {
+    color: var(--color-primary);
+  }
+}
+
+@media (min-width: 1300px) {
+  .sl-faq__heading {
+    font-size: 55px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .sl-faq__grid {
+    grid-template-columns: 1fr 1.8fr;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 809px) {
+  .sl-faq__container {
+    width: 90%;
+  }
+
+  .sl-faq__grid {
+    grid-template-columns: 1fr;
+    gap: var(--sl-faq-stack);
+  }
+
+  .sl-faq__title {
+    font-size: 17px;
+    line-height: 24px;
+  }
+
+  .sl-faq__q {
+    min-height: 52px;
+    padding: 14px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-faq__a,
+  .sl-faq__a p,
+  .sl-faq__icon,
+  .sl-faq__icon::before,
+  .sl-faq__icon::after {
+    transition: none;
+  }
+}
+
+/* Junca headline sweep. Glyphs ahead of the band stay hidden. */
+.scr-host.scr-wait {
+  opacity: 0;
+}
+
+.scr-char {
+  transition: none;
+}
+
+.scr-char.is-noise,
+.scr-char.is-hidden {
+  opacity: 0;
+}
+
+.scr-char.is-band {
+  color: inherit;
+}
+
+.scr-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scr-host.scr-wait {
+    opacity: 1;
+  }
+}

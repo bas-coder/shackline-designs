@@ -1,0 +1,144 @@
+Content Architecture
+Hero Section
+Headline: From the Sidewalk to the Screen—We Build Your Entire Growth Ecosystem.
+
+Subheadline: ShackLine Designs unifies custom corporate apparel, trend-driven promotional merchandise, high-converting web design, and hyper-local SEO dominance under one roof.
+
+change this text  - "We build your entire growth ecosystem - apparel, merch, web and local SEO under one roof" to "ShackLine Designs unifies custom corporate apparel, trend-driven promotional merchandise, high-converting web design, and hyper-local SEO dominance under one roof."
+
+Primary CTA: Get a Custom Quote
+
+Secondary CTA: Explore Our Solutions
+
+About Us
+Welcome to ShackLine Designs
+At ShackLine Designs, we are the architectural engine behind modern business growth. We bridge the gap between your physical storefront and the digital world, transforming your offline presence into a high-performing, 
+customer-attracting ecosystem.
+
+Whether you are launching a grand opening with custom corporate apparel and promotional merchandise, or scaling your digital footprint with a lightning-fast website and local Google Map dominance, 
+ShackLine builds the exact infrastructure your brand needs to succeed.
+
+Why a Unified Ecosystem Wins
+Zero Fragmentation: No more juggling a separate promo supplier, web developer, and SEO agency. We manage your entire brand under one roof.
+
+Data-Driven Results: From physical customer impressions to digital web conversions, our growth strategies are backed by clear metrics.
+
+Turnkey Scalability: Built to support ambitious startups, growing regional brands, and enterprise teams with automated onboarding merch and web tools.
+
+The 3 Pillars of Our Ecosystem
+Pillar
+Focus Area
+Core Offerings
+1. Physical Touchpoints
+High-Impact Tangible Branding
+• Custom Corporate Apparel & Uniforms
+
+
+• Eco-Friendly Promotional Products
+
+
+• Grand Opening & Event Branding Kits
+
+2. Digital Foundations
+High-Converting Web Architecture
+• Custom, Lightning-Fast Web Design
+
+
+• Mobile-First Responsive Interfaces
+
+
+• Automated Booking & E-Commerce Engines
+
+3. Visibility Engines
+Local Search & Review Dominance
+• Google Business Profile & Map Pack Optimization
+
+
+• Multi-Channel Media Marketing
+
+
+• Automated Customer Review & Reputation Systems
+
+
+Our 3-Phase Roadmap for Your Brand
+Phase 1: Total Platform Integration
+
+Merge your physical assets (custom apparel and promotional merch) with a fresh, modern website to establish an instantly recognizable brand identity.
+
+Phase 2: Hyper-Local Dominance
+
+Activate our local visibility engines. We optimize your Google Business profile and map rankings to capture top-of-search intent in your area.
+
+Phase 3: Autonomous Growth
+
+Deploy automated internal systems—such as automated customer review invites and turnkey employee onboarding merch kits.
+
+Frequently Asked Questions (FAQ)
+Q: Why should I work with ShackLine Designs instead of separate agencies?
+
+A: Working with one team guarantees brand consistency across your printed apparel, promotional items, and online marketing—saving you time, reducing friction, and driving better campaign ROI.
+
+Q: Do you offer custom promotional packages for grand openings and events?
+
+A: Yes! We craft custom physical-plus-digital launch bundles that combine on-site promotional gear with online lead capture tools.
+
+Q: How long does a custom web build take with ShackLine?
+
+A: Most standard custom builds are launched within 2 to 4 weeks using our high-speed development frameworks.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Here is the A2P compliance information page. Let me know if you need anything else.
+Again thank you for all your help. Have a blessed day.
+
+
+1. Form Level Implementation Rules for AIWA
+
+When AIWA generates any form collecting a phone number (e.g., *Get a Quote*, *Contact Us*, *Checkout*), it must follow these strict technical constraints:
+
+1.Unchecked Checkbox: The SMS opt-in checkbox must NOT be pre-selected. It requires active, voluntary consent from the user.
+2.Separation of Terms: SMS consent cannot be bundled into the general Terms of Service or Privacy Policy acceptance. It must be its own distinct checkbox.
+3.Required Text Disclosures: Clear language explaining messaging purpose, frequency, rates, and opt-out instructions directly below the phone input field.
+
+2. Standard SMS Opt-In Checkbox Copy
+
+Place this directly beneath phone input fields on all website forms:
+
+I agree to receive text messages from ShackLine Designs regarding order updates, project quotes, and account alerts. Message frequency varies. Message & data rates may apply. Reply STOP to opt out at any time or HELP for assistance. 
+
+3. Required Privacy Policy & Terms Disclosures
+
+A2P compliance requires specific mandatory clauses inside the Privacy Policy and Terms of Service pages on `ShackLineDesigns.com`.
+
+Mandatory Privacy Policy Clause (Crucial for Campaign Approval)
+
+Carriers will reject campaign registrations if this exact non-sharing language is missing:
+
+SMS Mobile Information Protection:
+No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties."*
+
+Mandatory Terms & Conditions SMS Clause
+
+Text Messaging Program Terms:
+"By opting into ShackLine Designs SMS notifications, you agree to receive automated or transactional text messages related to your account, project quotes, order fulfillments, and customer support inquiries. Consent to receive text messages is not a condition of purchasing any goods or services. You can cancel the SMS service at any time by texting 'STOP'. After sending 'STOP', we will send a message confirming your unsubscribed status. For help, text 'HELP' or contact us at support@shacklinedesigns.com."
+
+4. System Prompt for AIWA
+
+Copy and paste this instruction block directly into AIWA to build compliant pages:
+
+[A2P 10DLC Compliance Directive]
+1. Include an SMS consent checkbox on all lead forms asking for a phone number.
+2. Ensure the SMS checkbox is UNCHECKED by default and structurally distinct from general terms.
+3. Display the exact disclosure text: "Message frequency varies. Message & data rates may apply. Reply STOP to cancel, HELP for help."
+4. Generate a footer link to dedicated "Privacy Policy" and "Terms of Service" pages containing explicit CTIA/A2P non-sharing declarations for mobile data.

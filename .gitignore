@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.turbo/
+*.log
+src/routeTree.gen.ts
+.tanstack/
+*.rar
+*.exe

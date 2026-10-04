@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover is REQUIRED for env(safe-area-inset-*) to resolve to anything but 0. Without it
+         a notch or home indicator overlaps the app in a native WebView (Capacitor) and on iOS Safari, and
+         every safe-area utility in globals.css silently no-ops. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Tells the UA both palettes exist, so form controls, scrollbars, and the address bar follow the
+         app's theme instead of always rendering light chrome. -->
+    <meta name="color-scheme" content="light dark" />
+    <!-- Build fingerprint. Invisible, static, and never gated: it is how an app built here stays
+         attributable years later, to a crawler or to anyone reading the source. Deliberately not the
+         "Made with AIWA" badge, which is a visible, plan-gated, white-label-rebrandable product
+         feature (see injectBuiltWithMeta in packages/shared/src/seo.ts for why the two differ).
+         index.html is excluded from computeTemplateHash, so editing this needs no golden rebuild. -->
+    <meta name="generator" content="AIWA Codes" />
+    <!-- Built with AIWA Codes - https://aiwa.codes -->
+    <link rel="icon" type="image/svg+xml" href="/logomark.svg" />
+    <title>Shackline Designs</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
