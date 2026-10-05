@@ -34,6 +34,11 @@ export const SUFFIX_STYLE = {
   fontSize: `${SUFFIX_FONT_EM}em`,
   transform: `translateY(${SUFFIX_OPTICAL_NUDGE})`,
 }
+const HEADER_SUFFIX_REDUCTION = '3px'
+const HEADER_SUFFIX_STYLE = {
+  ...SUFFIX_STYLE,
+  fontSize: `calc(${SUFFIX_FONT_EM}em - ${HEADER_SUFFIX_REDUCTION})`,
+}
 const HEADER_BAND_TOP = '1em'
 const HEADER_BAND = '3em'
 const WORDMARK_LAYER = 50
@@ -228,7 +233,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           height: HEADER_BAND,
         }}
       >
-        <span className="ef-designs" style={SUFFIX_STYLE}>
+        <span className="ef-designs" style={HEADER_SUFFIX_STYLE}>
           {BRAND_SUFFIX}
         </span>
       </a>

@@ -1462,8 +1462,14 @@ body {
   --sl-load-ink: #ffffff;
   --sl-load-fill: #ed1c24;
   --sl-load-track: rgb(255 255 255 / 22%);
-  --sl-load-size: clamp(1.35rem, 2.2vw, 2rem);
-  --sl-load-gap: 1.25rem;
+  --sl-load-mark: 16px;
+  --sl-load-word: 12px;
+  --sl-load-word-tracking: -0.45px;
+  --sl-load-brand-gap: 6px;
+  --sl-load-gap: 14px;
+  --sl-load-track-width: 72px;
+  --sl-load-track-height: 2px;
+  --sl-load-track-radius: 2px;
   --sl-load-fade: 480ms;
   --sl-load-layer: 80;
 }
@@ -1488,18 +1494,29 @@ body {
   flex-direction: column;
   align-items: center;
   gap: var(--sl-load-gap);
-  font-size: var(--sl-load-size);
 }
 
 .sl-load-cover__mark {
   display: inline-flex;
   align-items: center;
-  gap: 0.35em;
+  gap: var(--sl-load-brand-gap);
+}
+
+.sl-load-cover .ef-logo {
+  width: auto;
+  height: var(--sl-load-mark);
+}
+
+.sl-load-cover .ef-designs {
+  font-size: var(--sl-load-word);
+  line-height: 1;
+  letter-spacing: var(--sl-load-word-tracking);
 }
 
 .sl-load-cover__track {
-  width: var(--ef-logo-width);
-  height: 1px;
+  width: var(--sl-load-track-width);
+  height: var(--sl-load-track-height);
+  border-radius: var(--sl-load-track-radius);
   background: var(--sl-load-track);
   overflow: hidden;
 }

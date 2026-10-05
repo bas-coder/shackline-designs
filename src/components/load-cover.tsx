@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ShacklineLogo } from '@/components/shackline-logo'
-import { SUFFIX_STYLE } from '@/components/site-chrome'
 import { BRAND_SUFFIX } from '@/lib/content'
 import { criticalLeavesImmediately, criticalSnapshot, subscribeCritical } from '@/lib/critical-load'
 
@@ -50,7 +49,7 @@ export function LoadCover() {
       <div className="sl-load-cover__lockup">
         <span className="sl-load-cover__mark">
           <ShacklineLogo />
-          <span className="ef-designs" style={SUFFIX_STYLE}>
+          <span className="ef-designs">
             {BRAND_SUFFIX}
           </span>
         </span>
