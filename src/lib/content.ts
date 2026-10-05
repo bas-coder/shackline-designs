@@ -19,9 +19,8 @@ export const QUOTE_SUBJECT = 'Custom quote request - ShackLine Designs'
  *  empty means the email path stands alone (no placeholder copy ever). */
 export const CALENDLY_URL = ''
 
-/** The merch store link is intentionally empty in this build: no external
- *  merch link appears anywhere on the site until the owner supplies it. */
-export const MERCH_URL = ''
+/** Shackline's original products site. */
+export const MERCH_URL = 'https://shacklinedesigns.espwebsites.com/'
 
 export const BRAND_NAME = 'Shackline'
 export const BRAND_SUFFIX = 'Designs'

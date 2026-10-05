@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { MERCH, MERCH_URL, WORK } from '@/lib/content'
 import { displayTitle } from '@/components/studio-copy'
+import { Button } from '@/components/ui/button'
 import { GlitchHeadline } from '@/components/glitch-headline'
 import { StreetCollage } from '@/components/street-collage'
 import product01 from '../../others/SHACKLINE_PRODUCT_01.jpg'
@@ -228,16 +229,11 @@ export function MerchBand({ id }: { id?: string }) {
         <div className="sl-collage-copy">
           <GlitchHeadline className="sl-display sl-display-lg">{displayTitle(MERCH.headline)}</GlitchHeadline>
           <p className="sl-copy mt-6 max-w-[46ch]">{MERCH.intro}</p>
-          {MERCH_URL ? (
-            <a
-              href={MERCH_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="sl-display sl-display-sm mt-8 inline-block underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground"
-            >
+          <Button asChild className="mt-8 h-12 rounded-none px-6 font-sans text-base font-medium">
+            <a href={MERCH_URL} target="_blank" rel="noreferrer">
               {MERCH.cta}
             </a>
-          ) : null}
+          </Button>
           <p className="sl-copy mt-12 max-w-[62ch] border-t sl-rule pt-8 text-muted-foreground">
             {MERCH.ticker.map((item) => displayTitle(item)).join('  ·  ')}
           </p>
