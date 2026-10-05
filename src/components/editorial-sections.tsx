@@ -95,10 +95,11 @@ export function RoadmapProgression({ id }: { id?: string }) {
           const color = PHASE_COLORS[index] ?? PHASE_COLORS[PHASE_COLORS.length - 1]
           const image = PHASE_IMAGES[index]
           const top = `calc(${PHASE_HEADER} + ${index} * ${PHASE_STRIP})`
+          const stopsAtImage = index > 1
           return (
             <li
               key={phase.num}
-              className="sl-phase sticky motion-reduce:static motion-reduce:!min-h-0"
+              className={stopsAtImage ? 'sl-phase sticky pb-12 motion-reduce:static motion-reduce:!min-h-0' : 'sl-phase sticky motion-reduce:static motion-reduce:!min-h-0'}
               style={{
                 top,
                 zIndex: index + 1,
@@ -109,7 +110,7 @@ export function RoadmapProgression({ id }: { id?: string }) {
                 ['--phase-copy-start' as string]: PHASE_COPY_START,
               }}
             >
-              <div className="grid items-start lg:grid-cols-2">
+              <div className={stopsAtImage ? 'grid h-fit items-end lg:grid-cols-2' : 'grid items-start lg:grid-cols-2'}>
                 <div
                   className="sl-phase__title sticky z-[2] flex items-end gap-5 px-[var(--sl-gutter)] motion-reduce:static lg:gap-8"
                   style={{ top, height: PHASE_STRIP, backgroundColor: color, paddingBottom: PHASE_TITLE_PAD }}
@@ -122,7 +123,7 @@ export function RoadmapProgression({ id }: { id?: string }) {
                     {phase.name}
                   </h3>
                 </div>
-                <div className="px-[var(--sl-gutter)] pb-12 lg:-mt-[var(--phase-strip)] lg:pt-[calc(var(--phase-strip)+var(--phase-copy-start))] lg:pr-[var(--sl-gutter)] lg:pl-4">
+                <div className={stopsAtImage ? 'px-[var(--sl-gutter)] lg:-mt-[var(--phase-strip)] lg:pt-[calc(var(--phase-strip)+var(--phase-copy-start))] lg:pr-[var(--sl-gutter)] lg:pl-4' : 'px-[var(--sl-gutter)] pb-12 lg:-mt-[var(--phase-strip)] lg:pt-[calc(var(--phase-strip)+var(--phase-copy-start))] lg:pr-[var(--sl-gutter)] lg:pl-4'}>
                   {phase.title ? (
                     <p className="max-w-[36ch] font-sans text-lg font-medium leading-snug text-white">{phase.title}</p>
                   ) : null}
