@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ABOUT, FAQ } from '@/lib/content'
 import { StudioSection } from '@/components/studio-copy'
 import { GlitchHeadline } from '@/components/glitch-headline'
+import { IntroRise, INTRO_STAGGER } from '@/components/scroll-intro'
 import { cn } from '@/lib/utils'
 
 /** The company description, set as a reading column. */
@@ -11,10 +12,10 @@ export function AboutBand({ id }: { id?: string }) {
       <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-16">
         <GlitchHeadline className="sl-display sl-display-lg lg:col-span-5">{ABOUT.headline}</GlitchHeadline>
         <div className="flex max-w-[58ch] flex-col gap-5 lg:col-span-7 lg:pt-3">
-          {ABOUT.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="sl-copy">
+          {ABOUT.paragraphs.map((paragraph, index) => (
+            <IntroRise key={paragraph} as="p" className="sl-copy" delay={INTRO_STAGGER} index={index}>
               {paragraph}
-            </p>
+            </IntroRise>
           ))}
         </div>
       </div>

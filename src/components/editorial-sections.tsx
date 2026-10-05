@@ -5,6 +5,7 @@ import phaseKits from '../assets/roadmap/phase-03-kits.jpg'
 import { CONTACT, ECOSYSTEM, FAQ, FOOTER, PILLAR_SECTION, PILLARS, ROADMAP } from '@/lib/content'
 import { displayTitle, StudioSection } from '@/components/studio-copy'
 import { GlitchHeadline } from '@/components/glitch-headline'
+import { IntroRise } from '@/components/scroll-intro'
 
 const PHASE_COLORS = ['#260503', '#4B0B06', '#711009'] as const
 const PHASE_RULE = 'rgb(255 255 255 / 5%)'
@@ -24,8 +25,14 @@ export function ManifestoPillars({ id }: { id?: string }) {
       <GlitchHeadline className="sl-display sl-display-lg max-w-[16ch]">{PILLAR_SECTION.headline}</GlitchHeadline>
 
       <div className="mt-16 grid gap-12 border-t sl-rule pt-12 md:mt-20 md:gap-10 md:pt-14 lg:grid-cols-3">
-        {PILLARS.filter((pillar) => Boolean(pillar) && pillar.name).map((pillar) => (
-          <article key={pillar.id} id={pillar.id === id ? undefined : pillar.id} className="scroll-mt-24">
+        {PILLARS.filter((pillar) => Boolean(pillar) && pillar.name).map((pillar, index) => (
+          <IntroRise
+            key={pillar.id}
+            as="article"
+            id={pillar.id === id ? undefined : pillar.id}
+            className="scroll-mt-24"
+            index={index}
+          >
             <p className="sl-index text-muted-foreground">{pillar.num}</p>
             <h3 className="sl-display sl-display-sm mt-4">{displayTitle(pillar.name)}</h3>
             <p className="sl-copy mt-3">{pillar.title}</p>
@@ -36,7 +43,7 @@ export function ManifestoPillars({ id }: { id?: string }) {
                 </li>
               ))}
             </ul>
-          </article>
+          </IntroRise>
         ))}
       </div>
     </StudioSection>
@@ -49,9 +56,11 @@ export function EcosystemRows({ id }: { id?: string }) {
     <StudioSection id={id} section="ecosystem">
       <GlitchHeadline className="sl-display sl-display-lg max-w-[18ch]">{ECOSYSTEM.headline}</GlitchHeadline>
       <ol className="mt-12 border-t sl-rule">
-        {ECOSYSTEM.rows.map((row) => (
-          <li
+        {ECOSYSTEM.rows.map((row, index) => (
+          <IntroRise
             key={row.label}
+            as="li"
+            index={index}
             className="grid gap-3 border-b sl-rule py-8 sm:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] sm:items-baseline sm:gap-10 sm:py-9"
           >
             <h3 className="sl-display sl-display-sm">
@@ -59,7 +68,7 @@ export function EcosystemRows({ id }: { id?: string }) {
               {displayTitle(row.label)}
             </h3>
             <p className="sl-copy max-w-[46ch]">{row.body}</p>
-          </li>
+          </IntroRise>
         ))}
       </ol>
     </StudioSection>

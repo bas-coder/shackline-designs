@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { FOUNDERS, HERO_FOUNDERS } from '@/lib/content'
 import { StudioSection } from '@/components/studio-copy'
+import { IntroMask, IntroRise, INTRO_STAGGER } from '@/components/scroll-intro'
 import { cn } from '@/lib/utils'
 
 const CYCLE = HERO_FOUNDERS.filter((founder) => Boolean(founder.src))
 const HOLD_MS = 3600
+const PORTRAIT_SCALE = 1.06
 
 /** Founder portraits sit to the right of the line. Every delivered photo crossfades in the frame. */
 export function FounderCrossfade({ id }: { id?: string }) {
@@ -33,11 +35,18 @@ export function FounderCrossfade({ id }: { id?: string }) {
     <StudioSection id={id} section="founders">
       <div className="sl-founders">
         <div>
-          <p className="font-sans text-base tracking-[-0.02em] text-foreground">{FOUNDERS.eyebrow}</p>
-          <h2 className="sl-display sl-display-lg mt-6 max-w-[16ch]">{FOUNDERS.headline}</h2>
-          <p className="sl-copy mt-6 max-w-[36ch]">{FOUNDERS.body}</p>
+          <IntroRise as="p" className="font-sans text-base tracking-[-0.02em] text-foreground">
+            {FOUNDERS.eyebrow}
+          </IntroRise>
+          <IntroMask className="sl-display sl-display-lg mt-6 max-w-[16ch]" delay={INTRO_STAGGER}>
+            {FOUNDERS.headline}
+          </IntroMask>
+          <IntroRise as="p" className="sl-copy mt-6 max-w-[36ch]" index={2}>
+            {FOUNDERS.body}
+          </IntroRise>
         </div>
         <div className="sl-founder-frame">
+          <IntroRise className="absolute inset-0" distance={0} scaleFrom={PORTRAIT_SCALE} delay={INTRO_STAGGER}>
           {CYCLE.map((founder) => {
             if (!founder.src) return null
             const front = founder === active
@@ -57,6 +66,7 @@ export function FounderCrossfade({ id }: { id?: string }) {
               />
             )
           })}
+          </IntroRise>
         </div>
       </div>
     </StudioSection>
