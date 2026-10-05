@@ -51,7 +51,7 @@ export function QuoteForm({ id }: { id?: string }) {
 
   return (
     <StudioSection id={id} section="contact">
-      <div className="grid items-start gap-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.1fr)] lg:gap-20">
+      <div className="sl-quote-grid grid items-start gap-16 lg:gap-20">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SplitLead title={CONTACT.headline} lede={CONTACT.intro} sticky={false} />
           <p className="sl-copy mt-8 max-w-[36ch]">

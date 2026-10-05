@@ -66,6 +66,8 @@ function PreviewFrame({ src, alt, reduce }: { src: string; alt: string; reduce: 
       <img
         src={src}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         className="block h-full w-full object-cover"
         style={{ transform: settled ? 'translateY(0)' : `translateY(${PHOTO_START})`, transition: wipe }}
       />
@@ -186,6 +188,8 @@ export function WorkBento({ id }: { id?: string }) {
                   <img
                     src={FRAME_IMAGES[index]}
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     className="mt-4 aspect-[4/3] w-full max-w-md object-cover"
                   />
                 ) : null}

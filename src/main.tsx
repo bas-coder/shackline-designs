@@ -9,9 +9,9 @@ import * as AppModule from './App';
 import './lib/auth';
 import { initMobileFetch } from './lib/authed-fetch';
 import { initTheme } from './lib/theme';
-// Inter replaces Helvetica Now. Instrument Sans (width axis) replaces Serrif.
-// Imported here so a regenerated globals.css can't drop the faces.
-import '@fontsource-variable/instrument-sans/wdth.css';
+import { beginCriticalLoad } from './lib/critical-load';
+// Inter replaces Helvetica Now. Instrument Sans (width axis) is declared in
+// globals.css with font-display: block so the condensed face is the one that paints.
 import '@fontsource/instrument-serif/400.css';
 import '@fontsource-variable/inter';
 import './globals.css';
@@ -24,6 +24,7 @@ const App = ((AppModule as { App?: ComponentType }).App ??
 // Resolve light/dark BEFORE the first paint. Doing this in an effect instead shows a flash of the
 // wrong palette on every cold load, which is especially obvious in a native WebView.
 initTheme();
+beginCriticalLoad();
 // Inside a Capacitor bundle (VITE_API_ORIGIN set) every relative /api call must become absolute,
 // including the raw fetch('/api/...') calls generated code uses for public routes. No-op on the web.
 initMobileFetch();

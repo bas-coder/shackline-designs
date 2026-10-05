@@ -1,5 +1,6 @@
 import { createRootRoute, createRoute, createRouter, RouterProvider, Outlet } from '@tanstack/react-router'
 import { ErrorScreen, NotFoundScreen } from '@/components/chrome'
+import { LoadCover } from '@/components/load-cover'
 import { Home } from '@/routes/home'
 import { PrivacyPolicy, TermsOfService } from '@/routes/legal'
 
@@ -62,6 +63,7 @@ function RootLayout() {
         }
         section[id]{scroll-margin-top:5rem}
       `}</style>
+      <LoadCover />
       <Outlet />
     </>
   )

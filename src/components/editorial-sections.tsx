@@ -47,7 +47,7 @@ export function ManifestoPillars({ id }: { id?: string }) {
 export function EcosystemRows({ id }: { id?: string }) {
   return (
     <StudioSection id={id} section="ecosystem">
-      <GlitchHeadline className="sl-display sl-display-md max-w-[18ch]">{ECOSYSTEM.headline}</GlitchHeadline>
+      <GlitchHeadline className="sl-display sl-display-lg max-w-[18ch]">{ECOSYSTEM.headline}</GlitchHeadline>
       <ol className="mt-12 border-t sl-rule">
         {ECOSYSTEM.rows.map((row) => (
           <li
@@ -102,7 +102,7 @@ export function RoadmapProgression({ id }: { id?: string }) {
             >
               <div className="grid items-start lg:grid-cols-2">
                 <div
-                  className="sl-phase__title sticky z-[2] flex items-end gap-5 px-[clamp(1.25rem,4vw,2.5rem)] motion-reduce:static lg:gap-8"
+                  className="sl-phase__title sticky z-[2] flex items-end gap-5 px-[var(--sl-gutter)] motion-reduce:static lg:gap-8"
                   style={{ top, height: PHASE_STRIP, backgroundColor: color, paddingBottom: PHASE_TITLE_PAD }}
                 >
                   <span className="sl-index !text-white/70">{phase.num.replace('PHASE ', '')}</span>
@@ -113,13 +113,13 @@ export function RoadmapProgression({ id }: { id?: string }) {
                     {phase.name}
                   </h3>
                 </div>
-                <div className="px-[clamp(1.25rem,4vw,2.5rem)] pb-12 lg:-mt-[var(--phase-strip)] lg:pt-[calc(var(--phase-strip)+var(--phase-copy-start))] lg:pr-[clamp(1.25rem,4vw,2.5rem)] lg:pl-4">
+                <div className="px-[var(--sl-gutter)] pb-12 lg:-mt-[var(--phase-strip)] lg:pt-[calc(var(--phase-strip)+var(--phase-copy-start))] lg:pr-[var(--sl-gutter)] lg:pl-4">
                   {phase.title ? (
                     <p className="max-w-[36ch] font-sans text-lg font-medium leading-snug text-white">{phase.title}</p>
                   ) : null}
                   <p className="max-w-[42ch] font-sans text-[1.0625rem] leading-relaxed text-white/85">{phase.body}</p>
                   {image ? (
-                    <img src={image} alt={phase.name} className="mt-6 aspect-video w-full object-cover" />
+                    <img src={image} alt={phase.name} loading="lazy" decoding="async" className="mt-6 aspect-video w-full object-cover" />
                   ) : null}
                 </div>
               </div>

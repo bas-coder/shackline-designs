@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { DISPLAY_FONT_SPEC, whenDisplayFontReady } from '@/lib/display-font'
 
 const GLYPHS_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 const GLYPHS_MIXED = `${GLYPHS_UPPER}abcdefghijklmnopqrstuvwxyz`
@@ -109,10 +110,22 @@ export function GlitchHeadline({ className, children }: { className?: string; ch
   const [playing, setPlaying] = useState(false)
   const [widths, setWidths] = useState<number[] | null>(null)
   const [frame, setFrame] = useState<Frame | null>(null)
+  const [fontReady, setFontReady] = useState(() => typeof document !== 'undefined' && document.fonts.check(DISPLAY_FONT_SPEC))
   const parts = partsOf(children)
 
+  useEffect(() => {
+    if (fontReady) return
+    let cancel = false
+    whenDisplayFontReady().then(() => {
+      if (!cancel) setFontReady(true)
+    })
+    return () => {
+      cancel = true
+    }
+  }, [fontReady])
+
   useLayoutEffect(() => {
-    if (settled) return
+    if (settled || !fontReady) return
     const host = hostRef.current
     if (!host) return
 
@@ -201,7 +214,7 @@ export function GlitchHeadline({ className, children }: { className?: string; ch
       window.clearInterval(rescue)
       cancelAnimationFrame(frameId)
     }
-  }, [children, settled, widths])
+  }, [children, settled, widths, fontReady])
 
   if (settled) {
     return <h2 className={className}>{children}</h2>

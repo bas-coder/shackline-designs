@@ -2,16 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { StudioGradient } from '@/components/ui/studio-gradient'
 import { studioBackground } from '@/backgrounds/studio-background'
 import { BRAND_LOCATION, HERO } from '@/lib/content'
-import product01 from '../../others/SHACKLINE_PRODUCT_01.jpg'
-import product02 from '../../others/SHACKLINE_PRODUCT_02.jpeg'
-import product03 from '../../others/SHACKLINE_PRODUCT_03.jpg'
-import product04 from '../../others/SHACKLINE_PRODUCT_04.jpg'
-import product05 from '../../others/SHACKLINE_PRODUCT_05.jpeg'
-import web01 from '../../others/SHACKLINE_WEB_01.jpg'
-import web02 from '../../others/SHACKLINE_WEB_02.jpg'
-import web03 from '../../others/SHACKLINE_WEB_03.jpg'
-import web04 from '../../others/SHACKLINE_WEB_04.jpg'
-import web05 from '../../others/SHACKLINE_WEB_05.jpg'
+import { criticalReady } from '@/lib/critical-load'
+import { HERO_CARD_SRCS } from '@/lib/hero-cards'
 
 /**
  * Avecanni desktop hero loop, measured from their 11.76s video.
@@ -46,7 +38,7 @@ const CARD_ENTER_SCALE = 0.86
 const CARD_LEAVE_SCALE = 0.5
 const CARD_REST_GAP_VW = 3.2
 const CARD_REST_TILT = 1.1
-const CORNER_INSET = 20
+const CORNER_INSET = 'var(--sl-gutter)'
 const CORNER_LINE = 1.2
 const SIDE_LINE = 1.3
 const SIDE_WEIGHT = 400
@@ -61,18 +53,20 @@ const CLOCK_ZONE = 'America/Los_Angeles'
 const CLOCK_INTERVAL_MS = 30_000
 const CARD_PERSPECTIVE = '1400px'
 
-const CARDS = [
-  { src: product01, alt: 'Shackline product 1' },
-  { src: product02, alt: 'Shackline product 2' },
-  { src: product03, alt: 'Shackline product 3' },
-  { src: product04, alt: 'Shackline product 4' },
-  { src: product05, alt: 'Shackline product 5' },
-  { src: web01, alt: 'Shackline web 1' },
-  { src: web02, alt: 'Shackline web 2' },
-  { src: web03, alt: 'Shackline web 3' },
-  { src: web04, alt: 'Shackline web 4' },
-  { src: web05, alt: 'Shackline web 5' },
+const CARD_ALTS = [
+  'Shackline product 1',
+  'Shackline product 2',
+  'Shackline product 3',
+  'Shackline product 4',
+  'Shackline product 5',
+  'Shackline web 1',
+  'Shackline web 2',
+  'Shackline web 3',
+  'Shackline web 4',
+  'Shackline web 5',
 ]
+
+const CARDS = HERO_CARD_SRCS.map((src, index) => ({ src, alt: CARD_ALTS[index] ?? '' }))
 
 const CARD_COUNT = CARDS.length
 
@@ -188,6 +182,17 @@ export function HeroStage() {
   const [centerShown, setCenterShown] = useState(0)
   const [imageTime, setImageTime] = useState(0)
   const [bottomDrop, setBottomDrop] = useState(BOTTOM_OFF)
+  const [armed, setArmed] = useState(false)
+
+  useEffect(() => {
+    let cancel = false
+    criticalReady.then(() => {
+      if (!cancel) setArmed(true)
+    })
+    return () => {
+      cancel = true
+    }
+  }, [])
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -198,7 +203,7 @@ export function HeroStage() {
   }, [])
 
   useEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || !armed) return
     let timer = 0
     const run = () => {
       const step = SEQUENCE[stepRef.current]
@@ -210,10 +215,10 @@ export function HeroStage() {
     }
     run()
     return () => window.clearTimeout(timer)
-  }, [reduceMotion])
+  }, [reduceMotion, armed])
 
   useEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || !armed) return
     const timers: number[] = []
     if (beat === 'bottom-in') {
       setBottomShown(0)
@@ -236,10 +241,10 @@ export function HeroStage() {
       return () => timers.forEach((id) => window.clearTimeout(id))
     }
     setBottomShown(0)
-  }, [beat, reduceMotion])
+  }, [beat, reduceMotion, armed])
 
   useEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || !armed) return
     if (beat === 'bottom-hold') {
       setBottomDrop(0)
       return
@@ -261,10 +266,10 @@ export function HeroStage() {
     setBottomDrop(from)
     frame = window.requestAnimationFrame(tick)
     return () => window.cancelAnimationFrame(frame)
-  }, [beat, reduceMotion])
+  }, [beat, reduceMotion, armed])
 
   useEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || !armed) return
     const timers: number[] = []
     if (beat === 'center-in') {
       setCenterShown(0)
@@ -287,10 +292,10 @@ export function HeroStage() {
       return () => timers.forEach((id) => window.clearTimeout(id))
     }
     setCenterShown(0)
-  }, [beat, reduceMotion])
+  }, [beat, reduceMotion, armed])
 
   useEffect(() => {
-    if (reduceMotion || beat !== 'images') {
+    if (reduceMotion || !armed || beat !== 'images') {
       setImageTime(0)
       return
     }
@@ -302,7 +307,7 @@ export function HeroStage() {
     }
     frame = window.requestAnimationFrame(tick)
     return () => window.cancelAnimationFrame(frame)
-  }, [beat, reduceMotion])
+  }, [beat, reduceMotion, armed])
 
   const showBottom = !reduceMotion && BOTTOM_BEATS.includes(beat)
   const showCenter = reduceMotion || CENTER_BEATS.includes(beat)

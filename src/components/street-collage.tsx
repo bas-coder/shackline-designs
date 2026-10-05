@@ -59,7 +59,7 @@ function CollageCard({ kind, src }: CollageCardProps) {
       <div data-interactive-collage-item-inner="" className="sl-collage__inner">
         <div className={`sl-collage__card ${kind === 'large' ? 'is-large' : 'is-medium'}`}>
           <div className="sl-collage__frame">
-            <img src={src} alt="" className="sl-collage__photo" />
+            <img src={src} alt="" loading="lazy" decoding="async" className="sl-collage__photo" />
           </div>
         </div>
       </div>
@@ -218,7 +218,7 @@ export function StreetCollage() {
         <div data-interactive-collage-item="" className="sl-collage__item sl-collage__sticker">
           <div data-interactive-collage-item-inner="" className="sl-collage__inner">
             <div className="sl-collage__sticker-wrap">
-              <img src={sticker} alt="" className="sl-collage__mark" />
+              <img src={sticker} alt="" loading="lazy" decoding="async" className="sl-collage__mark" />
             </div>
           </div>
         </div>

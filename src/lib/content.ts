@@ -188,7 +188,7 @@ export const ECOSYSTEM = {
 // ---------------------------------------------------------------- founders
 
 export const FOUNDERS = {
-  eyebrow: '( The people on the line )',
+  eyebrow: '( Led by Maria )',
   headline: 'There are a lot of shops that will take one piece of the job. We take the whole line.',
   body: 'One studio, from the printed piece to the map',
   note: 'The faces of ShackLine Designs.',

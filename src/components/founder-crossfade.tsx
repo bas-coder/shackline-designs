@@ -48,6 +48,8 @@ export function FounderCrossfade({ id }: { id?: string }) {
                 alt={front ? FOUNDERS.note : ''}
                 data-aiwa-asset={founder.ref}
                 crossOrigin="anonymous"
+                loading="lazy"
+                decoding="async"
                 className={cn(
                   'absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-out motion-reduce:transition-none',
                   front ? 'opacity-100' : 'opacity-0',
